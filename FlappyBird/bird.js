@@ -1,39 +1,38 @@
-const birdElem = document.querySelector('[data-bird]')
+const birdElem = document.querySelector("[data-bird]")
 const BIRD_SPEED = 0.5
-const JUMP_DURATION = 125 // how many ms our jump is going to last
-let timeSinceLastJump = 300
+const JUMP_DURATION = 125
+let timeSinceLastJump = Number.POSITIVE_INFINITY
 
-export function setupBird(){ //put bird in the middle of screen
+export function setupBird() {
     setTop(window.innerHeight / 2)
-    //document.removeEventListener("keydown", handleJump)
+    document.removeEventListener("keydown", handleJump)
     document.addEventListener("keydown", handleJump)
 }
-export function updateBird(delta){// use delta to make it user's frame rate dependent
-    // console.log(getTop())
-    console.log("update bird!")
 
-    if(timeSinceLastJump < JUMP_DURATION) { //when we jump dont go down for JUMP_DURATION time
-        setTop(getTop() - BIRD_SPEED * delta) // jump
-        console.log(timeSinceLastJump + " " + "JUMP")
-    }else{
-        setTop(getTop() + BIRD_SPEED * delta) // go down
-        console.log(timeSinceLastJump + " " + "DOOOWN")
+export function updateBird(delta) {
+    if (timeSinceLastJump < JUMP_DURATION) {
+        setTop(getTop() - BIRD_SPEED * delta)
+    } else {
+        setTop(getTop() + BIRD_SPEED * delta)
     }
+
     timeSinceLastJump += delta
 }
-export function getBirdRect(){ // get top,left,right etc position of bird
+
+export function getBirdRect() {
     return birdElem.getBoundingClientRect()
 }
-function setTop(top){ // set bird position
+
+function setTop(top) {
     birdElem.style.setProperty("--bird-top", top)
 }
 
-function getTop(){
+function getTop() {
     return parseFloat(getComputedStyle(birdElem).getPropertyValue("--bird-top"))
 }
 
-function handleJump(e){
-    if(e.code !== "Space") return
+function handleJump(e) {
+    if (e.code !== "Space") return
 
     timeSinceLastJump = 0
 }
