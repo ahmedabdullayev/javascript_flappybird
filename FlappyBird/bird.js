@@ -10,6 +10,7 @@ export function setupBird(){ //put bird in the middle of screen
 }
 export function updateBird(delta){// use delta to make it user's frame rate dependent
     // console.log(getTop())
+    console.log("update bird!")
 
     if(timeSinceLastJump < JUMP_DURATION) { //when we jump dont go down for JUMP_DURATION time
         setTop(getTop() - BIRD_SPEED * delta) // jump
@@ -20,7 +21,9 @@ export function updateBird(delta){// use delta to make it user's frame rate depe
     }
     timeSinceLastJump += delta
 }
-
+export function getBirdRect(){ // get top,left,right etc position of bird
+    return birdElem.getBoundingClientRect()
+}
 function setTop(top){ // set bird position
     birdElem.style.setProperty("--bird-top", top)
 }
