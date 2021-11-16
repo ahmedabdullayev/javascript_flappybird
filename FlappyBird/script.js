@@ -9,8 +9,11 @@ import {
 document.addEventListener("keypress", handleStart, { once: true })
 const title = document.querySelector("[data-title]")
 const subtitle = document.querySelector("[data-subtitle]")
+const allscores = document.querySelector("[data-scores]")
 
+let interval
 let lastTime
+let timings = []
 function updateLoop(time) {
     if (lastTime == null) {
         lastTime = time
@@ -20,6 +23,7 @@ function updateLoop(time) {
     const delta = time - lastTime
     updateBird(delta)
     updatePipes(delta)
+    // console.log(lastTime)
     if (checkLose()) return handleLose()
     lastTime = time
     window.requestAnimationFrame(updateLoop)
@@ -42,6 +46,7 @@ function isCollision(rect1, rect2) {
 }
 
 function handleStart() {
+ interval = window.performance.now();
     title.classList.add("hide")
     setupBird()
     setupPipes()
@@ -50,10 +55,16 @@ function handleStart() {
 }
 
 function handleLose() {
+    var end = window.performance.now();
+    var dur = end - interval;
+    var sec = Number(((dur/1000) % 60).toFixed(2));
+    timings.push(sec)
+    console.warn(timings)
     setTimeout(() => {
         title.classList.remove("hide")
         subtitle.classList.remove("hide")
-        subtitle.textContent = `${getPassedPipesCount()} Pipes`
+        subtitle.textContent = `${getPassedPipesCount()} Pipes, your timing: ${ sec }`
+        allscores.textContent =`All scores: ${ timings } seconds`
         document.addEventListener("keypress", handleStart, { once: true })
     }, 100)
 }
